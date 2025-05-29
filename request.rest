@@ -1,0 +1,92 @@
+//CEK EVENT
+###
+GET http://localhost:5000/event
+
+//TAMBAH EVENT
+###
+POST http://localhost:5000/event
+Content-Type: application/json
+
+{
+  "title": "Veteran Festival",
+  "description" : "Festival musik tahunan yang dilaksanakan oleh BEM KM",
+  "location":"Lapangan softball UPN",
+  "holder":"BEM KM UPNYK",
+  "date": "2024-12-01",
+  "quota" : "1200"
+}
+
+//
+###
+PUT http://localhost:5000/event/?
+Content-Type: application/json
+
+{
+  "title": "meong",
+  "description" : "kfikkooo",
+  "location":"2025-01-01",
+  "holder":" woi kongeol",
+  "date": "",
+  "quota" : ""
+}
+
+###
+DELETE http://localhost:5000/event/2
+
+//GET TOKEN
+###
+GET http://localhost:5000/token
+
+//USER
+###
+GET http://localhost:5000/user
+
+###
+POST  http://localhost:5000/user
+Content-Type: application/json
+
+{
+  "name":"tes",
+  "email": "tes@gmail.com",
+  "pass": "meong"
+}
+###
+POST http://localhost:5000/loginuser
+Content-Type: application/json
+
+{
+  "email": "kar@gmail.com",
+  "pass": "kar123"
+}
+
+###
+PUT http://localhost:5000/edit-user/?
+Content-Type: application/json
+
+{
+ "name":"UKM Vocalista Paradisso",
+  "email": "vocalista@gmail.com",
+  "pass": "meongmeong",
+  "role": "admin"
+}
+
+###
+DELETE http://localhost:5000/delete-user/1
+
+###
+POST  http://localhost:5000/admin
+Content-Type: application/json
+
+{
+  "name":"karr",
+  "email": "admin@gmail.com",
+  "pass": "kar123"
+}
+###
+POST http://localhost:5000/loginadmin
+Content-Type: application/json
+
+{
+  "email": "tes2@gmail.com",
+  "pass": "meong2"
+}
