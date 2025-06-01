@@ -16,11 +16,12 @@
     }
 
     container.innerHTML = "";
+    events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     events.forEach(event => {
       const card = `
         <div class="col-md-4">
           <div class="card h-100 shadow-sm">
-            <img src="https://via.placeholder.com/600x400?text=${encodeURIComponent(event.title)}" class="card-img-top" alt="${event.title}" />
+            <img src="${event.img_url ? event.img_url : 'https://placehold.co/600x400?text=' + encodeURIComponent(event.title)}" class="card-img-top" alt="${event.title}" />
             <div class="card-body d-flex flex-column">
               <h5 class="card-title">${event.title}</h5>
               <p class="card-text">${event.description}</p>
@@ -28,7 +29,7 @@
               <div class="mt-auto">
                 <a href="edit-event-detail.html?id=${event.id}" class="btn btn-warning btn-sm">Edit</a>
                 <button class="btn btn-danger btn-sm" onclick="deleteEvent(${event.id})">Hapus</button>
-                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#registrantsModal" onclick="loadRegistrants(${event.id})">Lihat Pendaftar</button>
+                <a href="registrant-detail.html?event_id=${event.id}" class="btn btn-info btn-sm">Lihat Pendaftar</a>
               </div>
             </div>
           </div>
@@ -60,6 +61,7 @@ async function deleteEvent(id) {
     console.error(err);
   }
 }
+
 
 async function loadRegistrants(eventId) {
   const token = localStorage.getItem("token");

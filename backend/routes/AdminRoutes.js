@@ -5,7 +5,7 @@ import { getAccessTokenAdmin } from "../controller/TokenAdmin.js";
 
 const router = express.Router()
 //untuk ambil refresh token
-router.get("/token", getAccessTokenAdmin)
+router.get("/tokenadmin", getAccessTokenAdmin)
 
 //untuk login logout
 router.post("/loginadmin",login)

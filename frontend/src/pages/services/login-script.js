@@ -14,7 +14,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     const userRes = await fetch("http://localhost:5000/loginuser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, pass })
+      body: JSON.stringify({ email, pass }),
+      credentials: "include" // ✅ ini wajib agar cookie tersimpan
     });
 
     const userData = await userRes.json();
@@ -35,7 +36,8 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     const adminRes = await fetch("http://localhost:5000/loginadmin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, pass })
+      body: JSON.stringify({ email, pass }),
+      credentials: "include" // ✅ ini juga
     });
 
     const adminData = await adminRes.json();

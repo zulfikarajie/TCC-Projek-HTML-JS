@@ -12,7 +12,8 @@ function setAuthLinks() {
     // Jika login, tampilkan tombol Logout di navbar dan kosongkan tombol hero
     if (navLinks) {
       navLinks.innerHTML = `
-        <li class="nav-item"><a class="nav-link" href="logout.html">Logout</a></li>
+        <li class="nav-item"><a class="nav-link" href="user/dashboard-user.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="services/logout.html">Logout</a></li>
       `;
     }
     if (authButtons) authButtons.innerHTML = "";
@@ -20,14 +21,14 @@ function setAuthLinks() {
     // Jika belum login, tampilkan Sign In & Sign Up di navbar dan hero
     if (navLinks) {
       navLinks.innerHTML = `
-        <li class="nav-item"><a class="nav-link" href="/src/pages/services/login.html">Sign In</a></li>
-        <li class="nav-item"><a class="nav-link" href="/src/pages/services/register.html">Sign Up</a></li>
+        <li class="nav-item"><a class="nav-link" href="services/login.html">Sign In</a></li>
+        <li class="nav-item"><a class="nav-link" href="services/register.html">Sign Up</a></li>
       `;
     }
     if (authButtons) {
       authButtons.innerHTML = `
-        <a href="/src/pages/services/login.html" class="btn btn-light">Sign In</a>
-        <a href="/src/pages/services/register.html" class="btn btn-outline-light ms-2">Sign Up</a>
+        <a href="services/login.html" class="btn btn-light">Sign In</a>
+        <a href="services/register.html" class="btn btn-outline-light ms-2">Sign Up</a>
       `;
     }
   }
@@ -39,7 +40,7 @@ async function loadEvents() {
     let events = await res.json();
 
     if (!Array.isArray(events)) events = [];
-
+    events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     // Batasi 3 event teratas (jika backend tidak support _limit)
     if (events.length > 3) {
       events = events.slice(0, 3);
@@ -55,13 +56,13 @@ async function loadEvents() {
         year: "numeric",
       });
 
-      const link = isLoggedIn() ? `event-detail.html?id=${event.id}` : "login.html";
+      const link = isLoggedIn() ? `user/event-detail.html?id=${event.id}` : "services/login.html";
 
       const card = `
         <div class="col-md-4">
           <a href="${link}" class="text-decoration-none text-dark">
             <div class="card h-100 shadow-sm hover-card">
-              <img src="https://placehold.co/600x400?text=${encodeURIComponent(event.title)}" class="card-img-top" alt="Event Image" />
+              <img src="${event.img_url ? event.img_url : 'https://placehold.co/600x400?text=' + encodeURIComponent(event.title)}" class="card-img-top" alt="${event.title}" />
               <div class="card-body">
                 <h5 class="card-title">${event.title}</h5>
                 <p class="card-text">${event.description.substring(0, 100)}...</p>

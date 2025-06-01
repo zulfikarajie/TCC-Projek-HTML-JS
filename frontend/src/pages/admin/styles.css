@@ -50,4 +50,17 @@ body {
     text-align: center;
     margin-top: 60px;
   }
+
+  .footer1 {
+    background-color: white;
+    color: #1e3c72;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  .modal-content {
+  color: #212529;
+}
+
   

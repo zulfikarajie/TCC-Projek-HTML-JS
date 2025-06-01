@@ -76,41 +76,47 @@ async function createAdmin(req,res) {
   }    
 }
 
-async function updateAdmin(req,res) {
-    try {
-        let {pass} = req.body
-        if(pass){
-            const encryptPassword = await bcrypt.hash(pass,5)
-            pass = encryptPassword
-        }
+async function updateAdmin(req, res) {
+  try {
+    const { name, email, pass } = req.body;
 
-        if (Object.keys(req.body).length < 4) {
-        const error = new Error("Field cannot be empty 😠");
+    // Validasi wajib
+    if (!name || !email) {
+      const error = new Error("Nama dan email tidak boleh kosong 😠");
       error.statusCode = 400;
       throw error;
     }
-    const ifAdminExist = await Admin.findOne({where:{id:req.params.id}})
-    if(!ifAdminExist){
-        const error = new Error("user tidak ditemukan")
-        error.statusCode = 400
-        throw error
+
+    // Cek apakah admin dengan ID ada
+    const ifAdminExist = await Admin.findOne({ where: { id: req.params.id } });
+    if (!ifAdminExist) {
+      const error = new Error("User tidak ditemukan");
+      error.statusCode = 400;
+      throw error;
     }
-    const result = await Admin.update(
-        {...req.body, pass},
-        {where:{id:req.params.id}}
-    )
+
+    // Jika password diisi, hash dan update; jika tidak, tetap gunakan password lama
+    let updatedData = { name, email };
+    if (pass && pass.trim() !== "") {
+      const encryptPassword = await bcrypt.hash(pass, 5);
+      updatedData.pass = encryptPassword;
+    }
+
+    await Admin.update(updatedData, {
+      where: { id: req.params.id },
+    });
 
     return res.status(200).json({
-        status : "success",
-        message: "admin updated"
-    })
+      status: "success",
+      message: "admin updated",
+    });
 
-    } catch (error) {
-      return res.status(error.statusCode || 500).json({
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
       status: "Error",
-      message: error.message
-      })
-    }
+      message: error.message,
+    });
+  }
 }
 
 async function deleteAdmin(req, res) {
@@ -173,7 +179,7 @@ async function login(req, res) {
         const accessToken = jwt.sign(
           safeAdminData, // <- Payload yang akan disimpan di token
           process.env.ACCESS_TOKEN_SECRET, // <- Secret key untuk verifikasi
-          { expiresIn: "30s" } // <- Masa berlaku token
+          { expiresIn: "30m" } // <- Masa berlaku token
         );
 
         // Membuat refresh token dengan masa berlaku 1 hari
@@ -203,7 +209,7 @@ async function login(req, res) {
           // - "strict": Cookie, hanya dikirim untuk request SAME SITE (domain yang sama)
           // - "lax": Cookie dikirim untuk navigasi GET antar domain (default)
           // - "none": Cookie dikirim untuk CROSS-SITE requests (butuh secure:true)
-          sameSite: "none", // <- Untuk API yang diakses dari domain berbeda
+          sameSite: "lax", // <- Untuk API yang diakses dari domain berbeda
 
           // maxAge:
           // - Masa aktif cookie dalam milidetik (1 hari = 24x60x60x1000)
@@ -214,7 +220,7 @@ async function login(req, res) {
           // - `true`: Cookie hanya dikirim via HTTPS
           // - Mencegah MITM (Man-in-the-Middle) attack
           // - WAJIB `true` jika sameSite: "none"
-          secure: true,
+          secure: false,
         });
 
         // Kirim respons berhasil (200)

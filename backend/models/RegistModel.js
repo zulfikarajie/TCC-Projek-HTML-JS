@@ -45,5 +45,9 @@ Event.belongsToMany(User, {
 
 });
 
+// ✅ Ini penting agar Registration bisa include User/Event langsung
+Registration.belongsTo(User, { foreignKey: 'user_id' });
+Registration.belongsTo(Event, { foreignKey: 'event_id' });
+
 db.sync().then(()=>console.log("regist synchronized"))
 export default Registration

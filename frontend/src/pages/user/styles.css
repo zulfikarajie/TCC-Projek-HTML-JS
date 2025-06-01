@@ -2,6 +2,9 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f8f9fa;
     color: #343a40;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   
   .hero {
@@ -50,4 +53,16 @@ body {
     text-align: center;
     margin-top: 60px;
   }
+
+  .footer1 {
+    background-color: white;
+    color: #1e3c72;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  main {
+  flex: 1;
+}
   

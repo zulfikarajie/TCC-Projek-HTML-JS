@@ -6,6 +6,7 @@
   const info = document.getElementById("event-info");
   const button = document.getElementById("btn-daftar");
   const message = document.getElementById("response-message");
+  const imgPreview = document.getElementById("event-img-preview");
 
   if (!eventId) {
     info.textContent = "ID event tidak valid.";
@@ -18,6 +19,16 @@
     const res = await fetch(`http://localhost:5000/event/${eventId}`);
     if (!res.ok) throw new Error("Event tidak ditemukan.");
     const event = await res.json();
+
+    // Tampilkan gambar
+    if (imgPreview) {
+      imgPreview.src = event.img_url
+        ? event.img_url
+        : `https://placehold.co/600x300?text=${encodeURIComponent(event.title)}`;
+      imgPreview.alt = event.title;
+      imgPreview.classList.remove("d-none");
+    }
+
     info.innerHTML = `<strong>${event.title}</strong><br>${event.date} @ ${event.location}`;
   } catch (err) {
     console.error(err);

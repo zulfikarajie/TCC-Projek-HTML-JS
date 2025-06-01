@@ -1,4 +1,4 @@
-import Admin from "../models/UserModel.js";
+import Admin from "../models/AdminModel.js";
 import jwt from "jsonwebtoken"
 
 export const getAccessTokenAdmin = async(req,res) =>{
@@ -41,9 +41,10 @@ export const getAccessTokenAdmin = async(req,res) =>{
           // Buat access token baru (expire selama 30 detik)
           const accessToken = jwt.sign(
             safeAdminData,
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "30s" }
+            process.env.ACCESS_TOKEN_SECRET, // ⬅️ INI YANG PENTING
+            { expiresIn: "15m" }
           );
+
 
           // Kirim respons sukses + kasih access token yg udah dibikin tadi
           return res.status(200).json({

@@ -3,6 +3,10 @@ import User from '../models/UserModel.js';
 
 export const createEvent = async (req, res) => {
   const { title, description, date, location, quota } = req.body;
+  let img_url = null;
+  if (req.file && req.file.path) {
+    img_url = req.file.path;
+  }
   try {
     const event = await Event.create({
       title,
@@ -10,7 +14,8 @@ export const createEvent = async (req, res) => {
       date,
       location,
       quota,
-      created_by: req.userId
+      created_by: req.userId,
+      img_url
     });
     res.status(201).json(event);
   } catch (error) {
@@ -55,7 +60,8 @@ export const updateEvent = async (req, res) => {
       where: { id: req.params.id }
     });
     if (!event) return res.status(404).json({ message: 'Event not found' });
-
+    console.log("event.created_by:", event.created_by);
+    console.log("req.userId:", req.userId);
     if (event.created_by !== req.userId) return res.status(403).json({ message: 'Forbidden' });
 
     event.title = title;
@@ -63,6 +69,9 @@ export const updateEvent = async (req, res) => {
     event.date = date;
     event.location = location;
     event.quota = quota;
+    if (req.file && req.file.path) {
+      event.img_url = req.file.path;
+    }
     await event.save();
 
     res.json({ message: 'Event updated successfully' });

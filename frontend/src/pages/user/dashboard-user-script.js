@@ -1,7 +1,7 @@
 (async function loadEvents() {
   const token = localStorage.getItem("token");
   const container = document.getElementById("event-list");
-
+  
   try {
     const res = await fetch("http://localhost:5000/event", {
       method: "GET",
@@ -17,7 +17,7 @@
       container.innerHTML = `<div class="col-12 text-center"><p>Tidak ada event yang tersedia saat ini.</p></div>`;
       return;
     }
-
+    events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     events.forEach(event => {
       const eventDate = new Date(event.date).toLocaleDateString("id-ID", {
         day: "2-digit",
@@ -28,7 +28,7 @@
       const card = `
         <div class="col-md-4">
           <div class="card h-100 shadow-sm" style="cursor:pointer;" onclick="location.href='event-detail.html?id=${event.id}'">
-            <img src="https://via.placeholder.com/600x400?text=${encodeURIComponent(event.title)}" class="card-img-top" alt="${event.title}">
+            <img src="${event.img_url ? event.img_url : 'https://placehold.co/600x400?text=' + encodeURIComponent(event.title)}" class="card-img-top" alt="${event.title}" />
             <div class="card-body">
               <h5 class="card-title">${event.title}</h5>
               <p class="card-text">${event.description.substring(0, 100)}...</p>

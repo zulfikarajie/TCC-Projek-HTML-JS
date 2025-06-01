@@ -10,6 +10,7 @@ const Event = db.define(
         location : DataTypes.STRING,
         date : DataTypes.DATEONLY,
         quota: DataTypes.INTEGER,
+        img_url: DataTypes.STRING,
         created_by : {
             type: DataTypes.INTEGER,
             references:{

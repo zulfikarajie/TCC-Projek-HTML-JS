@@ -162,8 +162,8 @@ async function login(req, res) {
 
       // Disini kita mau mengcopy isi dari variabel userPlain ke variabel baru namanya safeUserData
       // Tapi di sini kita gamau copy semuanya, kita gamau copy password sama refresh_token karena itu sensitif
-      const { pass: _, refresh_token: __, ...safeUserData } = userPlain;
-
+      const { pass: _, refresh_token: __, id, ...rest } = userPlain;
+      const safeUserData = { id, ...rest }; // pastikan ID ikut
       // Ngecek apakah password sama kaya yg ada di DB
       const isPasswordValid = await bcrypt.compare(pass, user.pass);
 
@@ -173,7 +173,7 @@ async function login(req, res) {
         const accessToken = jwt.sign(
           safeUserData, // <- Payload yang akan disimpan di token
           process.env.ACCESS_TOKEN_SECRET, // <- Secret key untuk verifikasi
-          { expiresIn: "30s" } // <- Masa berlaku token
+          { expiresIn: "15m" } // <- Masa berlaku token
         );
 
         // Membuat refresh token dengan masa berlaku 1 hari
